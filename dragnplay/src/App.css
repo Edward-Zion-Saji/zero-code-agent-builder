@@ -20,6 +20,9 @@ body {
   padding: 20px;
   background-color: #121212;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .logo {
@@ -71,6 +74,7 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+  color: white;
 }
 
 .cta-button:hover {
@@ -92,6 +96,7 @@ body {
   display: flex;
   justify-content: space-around;
   margin-top: 30px;
+  flex-wrap: wrap;
 }
 
 .feature {
@@ -102,6 +107,14 @@ body {
   background-color: #2a2a3c;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   color: #ffffff;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .feature {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 }
 
 .drag-drop-area {
@@ -117,11 +130,11 @@ body {
   text-align: center; 
 }
 
-
 .demo h2 {
   font-size: 40px;
   margin-bottom: 30px;
 }
+
 /* AI Agent Builder Styles */
 .ai-agent-builder {
   padding: 60px 0;
@@ -204,6 +217,7 @@ body {
   display: flex;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .tab {
@@ -386,4 +400,191 @@ body {
 
 .edit-btn:hover, .toggle-btn:hover {
   background: #3a3a4c;
+}
+
+/* Flow Editor Styles */
+.flow-editor-section {
+  padding: 20px;
+  background-color: #1e1e2f;
+  min-height: calc(100vh - 70px);
+}
+
+.flow-editor-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  background-color: #121212;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+}
+
+.flow-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #444;
+}
+
+.flow-editor-header h1 {
+  font-size: 28px;
+  color: white;
+  margin: 0;
+}
+
+.flow-editor-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.flow-control-btn {
+  padding: 10px 15px;
+  background-color: #2a2a3c;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s;
+}
+
+.flow-control-btn:hover {
+  background-color: #3a3a4c;
+}
+
+.main-flow-container {
+  display: flex;
+  height: calc(100vh - 200px);
+  gap: 20px;
+}
+
+.overview-panel {
+  width: 250px;
+  background: #2a2a3c;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.overview-panel h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.node-info {
+  margin-top: auto;
+  margin-bottom: 20px;
+}
+
+.deploy-button {
+  padding: 10px;
+  background-color: #ff4081;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.deploy-button:hover {
+  background-color: #ff79a7;
+}
+
+.flow-container {
+  flex: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #444;
+  position: relative;
+}
+
+.flow-btn {
+  padding: 10px 15px;
+  background-color: #2a2a3c;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s;
+}
+
+.flow-btn:hover {
+  background-color: #3a3a4c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .agent-builder-container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #444;
+  }
+  
+  .content-area {
+    max-height: none;
+  }
+  
+  .main-flow-container {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .overview-panel {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .flow-container {
+    height: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .nav-links {
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .hero h1 {
+    font-size: 36px;
+  }
+  
+  .hero p {
+    font-size: 18px;
+  }
+  
+  .content-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .search-bar {
+    width: 100%;
+  }
+  
+  .flow-editor-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
 }
