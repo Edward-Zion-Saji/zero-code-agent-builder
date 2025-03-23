@@ -1,0 +1,153 @@
+{
+  "nodes": [
+    {
+      "id": "systemPrompt-1742608275777",
+      "type": "systemPrompt",
+      "position": {
+        "x": -125.35340948326842,
+        "y": -99.42811673681584
+      },
+      "data": {
+        "label": "SystemPrompt"
+      },
+      "width": 300,
+      "height": 232,
+      "selected": false,
+      "positionAbsolute": {
+        "x": -125.35340948326842,
+        "y": -99.42811673681584
+      },
+      "dragging": false
+    },
+    {
+      "id": "llm-1742608284338",
+      "type": "llm",
+      "position": {
+        "x": -4.596677746486449,
+        "y": 266.52930692350805
+      },
+      "data": {
+        "label": "Llm"
+      },
+      "width": 250,
+      "height": 216,
+      "selected": false,
+      "positionAbsolute": {
+        "x": -4.596677746486449,
+        "y": 266.52930692350805
+      },
+      "dragging": false
+    },
+    {
+      "id": "rag-1742608293193",
+      "type": "rag",
+      "position": {
+        "x": 308.7035953288261,
+        "y": -132.05284333646733
+      },
+      "data": {
+        "label": "Rag",
+        "provider": "pinecone",
+        "indexName": "slack-knowledge"
+      },
+      "width": 280,
+      "height": 284,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 308.7035953288261,
+        "y": -132.05284333646733
+      },
+      "dragging": false
+    },
+    {
+      "id": "tools-1742608312871",
+      "type": "tools",
+      "position": {
+        "x": 345.9408050138711,
+        "y": 247.25436733724905
+      },
+      "data": {
+        "label": "Tools",
+        "tools": [
+          {
+            "id": "google_calendar_create_meeting",
+            "name": "Google Calendar Create Meeting",
+            "enabled": true,
+            "description": "Create a Google Calendar event with Google Meet integration. Useful for scheduling meetings with team members."
+          },
+          {
+            "id": "google_calendar_view_events",
+            "name": "Google Calendar View Events",
+            "enabled": true,
+            "description": "View upcoming events on your Google Calendar. Useful for checking your schedule."
+          },
+          {
+            "id": "Weather",
+            "name": "Weather",
+            "enabled": false,
+            "description": "Useful for getting weather information for a specific location. Input should be a location name."
+          },
+          {
+            "id": "Wikipedia",
+            "name": "Wikipedia",
+            "enabled": false,
+            "description": "Useful for searching information on Wikipedia. Input should be a search query."
+          },
+          {
+            "id": "DateTime",
+            "name": "Datetime",
+            "enabled": true,
+            "description": "Useful for getting the current date and time. No input required."
+          }
+        ]
+      },
+      "width": 825,
+      "height": 436,
+      "positionAbsolute": {
+        "x": 345.9408050138711,
+        "y": 247.25436733724905
+      },
+      "selected": true,
+      "dragging": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "systemPrompt-1742608275777",
+      "sourceHandle": "output",
+      "target": "llm-1742608284338",
+      "targetHandle": null,
+      "animated": true,
+      "id": "reactflow__edge-systemPrompt-1742608275777output-llm-1742608284338"
+    },
+    {
+      "source": "systemPrompt-1742608275777",
+      "sourceHandle": "output",
+      "target": "rag-1742608293193",
+      "targetHandle": null,
+      "animated": true,
+      "id": "reactflow__edge-systemPrompt-1742608275777output-rag-1742608293193"
+    },
+    {
+      "source": "rag-1742608293193",
+      "sourceHandle": "output",
+      "target": "llm-1742608284338",
+      "targetHandle": null,
+      "animated": true,
+      "id": "reactflow__edge-rag-1742608293193output-llm-1742608284338"
+    },
+    {
+      "source": "llm-1742608284338",
+      "sourceHandle": null,
+      "target": "tools-1742608312871",
+      "targetHandle": null,
+      "animated": true,
+      "id": "reactflow__edge-llm-1742608284338-tools-1742608312871"
+    }
+  ],
+  "viewport": {
+    "x": 813.310275237516,
+    "y": 214.62061679849273,
+    "zoom": 1.0215759925527244
+  }
+}

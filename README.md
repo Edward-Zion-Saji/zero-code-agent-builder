@@ -1,161 +1,191 @@
-# Slack Agent Builder
+# Slack Agent
 
-A no-code platform for building AI agents for Slack using a visual drag-and-drop interface. Create powerful LangChain-based agents that can interact with users in Slack without writing any code.
+This application provides a Slack bot with Google Calendar integration, allowing users to schedule meetings and view calendar events directly from Slack. The application consists of a backend Python service and a Flow Editor frontend for configuring the agent.
 
-## Features
+## Table of Contents
 
-- **Visual Workflow Editor**: Drag and drop components to build your agent's logic
-- **LLM Integration**: Connect to various language models like GPT-4, Claude, etc.
-- **Slack Integration**: Deploy your agents directly to Slack workspaces
-- **Tool Connectors**: Add capabilities like web search, database queries, and API calls
-- **Logic Components**: Add conditional branching and custom code execution
-- **Test Chat Interface**: Test your agents before deploying them to Slack
+1. [Prerequisites](#prerequisites)
+2. [Installation](#installation)
+3. [Configuration](#configuration)
+   - [Slack Configuration](#slack-configuration)
+   - [Google Calendar API Setup](#google-calendar-api-setup)
+   - [OpenAI API Key](#openai-api-key)
+   - [Pinecone Setup for RAG (Retrieval Augmented Generation)](#pinecone-setup-for-rag-retrieval-augmented-generation)
+4. [Running the Application](#running-the-application)
+5. [Using the Flow Editor](#using-the-flow-editor)
+6. [Available Tools](#available-tools)
+7. [Troubleshooting](#troubleshooting)
 
-## Project Structure
+## Prerequisites
 
-- **Frontend**: React application with React Flow for the visual editor
-  - Components for different node types (Trigger, LLM, Tool, Logic, Output)
-  - Services for API communication and Slack integration
-  - Material-UI for styling
+- Python 3.8 or higher
+- Node.js 16 or higher
+- pnpm (for the Flow Editor)
+- A Slack workspace with admin privileges
+- A Google Cloud account
+- An OpenAI account
 
-- **Backend**: FastAPI application for:
-  - Workflow management and execution
-  - Slack integration (OAuth, events, messaging)
-  - LangChain integration for agent execution
-  - SQLite database for development (PostgreSQL for production)
+## Installation
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v16+)
-- npm or yarn
-- Python 3.8+ (for backend)
-- OpenAI API key (for LLM functionality)
-
-### Backend Setup
-
-1. Navigate to the backend directory:
-   ```
-   cd slack-agent/backend
+1. Clone the repository (if you haven't already):
+   ```bash
+   git clone <repository-url>
+   cd slack-new
    ```
 
-2. Create a virtual environment:
-   ```
-   python -m venv venv
-   ```
-
-3. Activate the virtual environment:
-   - On Windows:
-     ```
-     venv\Scripts\activate
-     ```
-   - On macOS/Linux:
-     ```
-     source venv/bin/activate
-     ```
-
-4. Install dependencies:
-   ```
-   pip install -r requirements.txt
+2. Install Python dependencies:
+   ```bash
+   pip install -r app/requirements.txt
    ```
 
-5. Create a `.env` file:
-   ```
-   DATABASE_URL=sqlite:///./app.db
-   OPENAI_API_KEY=your_openai_api_key
-   SECRET_KEY=your_secret_key
-   SLACK_CLIENT_ID=your_slack_client_id
-   SLACK_CLIENT_SECRET=your_slack_client_secret
+3. Install Flow Editor dependencies:
+   ```bash
+   cd app/flow-editor
+   pnpm install
    ```
 
-6. Initialize the database:
+## Configuration
+
+### Slack Configuration
+
+1. Create a new Slack app at [api.slack.com/apps](https://api.slack.com/apps)
+2. Under "Basic Information", note your App ID, Client ID, and Client Secret
+3. Enable Socket Mode in the "Socket Mode" section
+4. Generate an App-Level Token with the `connections:write` scope
+5. Under "OAuth & Permissions", add the following Bot Token Scopes:
+   - `app_mentions:read`
+   - `channels:history`
+   - `channels:read`
+   - `chat:write`
+   - `im:history`
+   - `im:read`
+   - `im:write`
+   - `users:read`
+6. Install the app to your workspace
+7. Copy the Bot User OAuth Token from the "OAuth & Permissions" section
+
+Create a `.env` file in the `app` directory with the following variables:
+```
+SLACK_BOT_TOKEN=xoxb-your-bot-token
+SLACK_APP_TOKEN=xapp-your-app-token
+```
+
+### Google Calendar API Setup
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project
+3. Enable the Google Calendar API for your project
+4. Configure the OAuth consent screen:
+   - Set the user type to "External"
+   - Add the necessary scopes for Google Calendar (`https://www.googleapis.com/auth/calendar`)
+   - Add test users if needed
+5. Create OAuth 2.0 credentials:
+   - Application type: Desktop application
+   - Download the credentials JSON file
+   - Rename it to `credentials.json` and place it in the `app` directory
+
+The first time you run the application, it will prompt you to authorize access to your Google Calendar. Follow the instructions to complete the OAuth flow and generate a `token.json` file.
+
+### OpenAI API Key
+
+1. Sign up for an OpenAI account at [platform.openai.com](https://platform.openai.com/)
+2. Generate an API key in the API Keys section
+3. Add the API key to your `.env` file:
    ```
-   python init_db.py
+   OPENAI_API_KEY=your-openai-api-key
    ```
 
-7. Start the backend server:
+### Pinecone Setup for RAG (Retrieval Augmented Generation)
+
+1. Create a Pinecone account at [pinecone.io](https://www.pinecone.io/)
+2. Create a new index with the following settings:
+   - Dimensions: 1536 (for OpenAI embeddings)
+   - Metric: Cosine
+   - Pod Type: p1.x1 (or choose based on your needs)
+3. Get your API key from the Pinecone dashboard
+4. Add the Pinecone credentials to your `.env` file:
    ```
-   python -m uvicorn app.main:app --reload
+   PINECONE_API_KEY=your-pinecone-api-key
+   PINECONE_ENVIRONMENT=your-pinecone-environment
+   PINECONE_INDEX=your-pinecone-index
+   ```
+5. To upload documents to your knowledge base, use the provided script:
+   ```bash
+   cd app
+   python upload_to_pinecone.py --file path/to/your/document.pdf
+   ```
+   Supported file formats include PDF, DOCX, TXT, and more.
+
+## Running the Application
+
+1. Start the Flow Editor:
+   ```bash
+   cd app/flow-editor
+   pnpm run dev
+   ```
+   The Flow Editor will be available at http://localhost:3000
+
+2. In a separate terminal, start the Slack agent:
+   ```bash
+   cd app
+   python app.py
    ```
 
-### Frontend Setup
+## Using the Flow Editor
 
-1. Navigate to the frontend directory:
-   ```
-   cd slack-agent/frontend
-   ```
+The Flow Editor provides a visual interface for configuring your Slack agent:
 
-2. Install dependencies:
-   ```
-   npm install
-   ```
+1. Open http://localhost:3000 in your browser
+2. Use the sidebar to add or remove nodes
+3. Configure the System Prompt to define your agent's personality
+4. Select the LLM model to use (default: gpt-4)
+5. Enable or disable tools in the Tools node
+6. Configure RAG settings if needed
+7. Click "Apply Changes" to update your agent configuration
+8. Use the Chat sidebar to test your agent directly from the Flow Editor
 
-3. Create a `.env` file based on `.env.example`:
-   ```
-   cp .env.example .env
-   ```
+## Available Tools
 
-4. Update the `.env` file with your backend URL:
-   ```
-   VITE_API_BASE_URL=http://localhost:8000
-   ```
+The Slack agent comes with several built-in tools:
 
-5. Start the development server:
-   ```
-   npm run dev
-   ```
+1. **Google Calendar Create Meeting** - Schedule meetings with Google Meet integration
+2. **Google Calendar View Events** - View upcoming events on your calendar
+3. **Weather** - Get weather information for a location
+4. **Wikipedia** - Search for information on Wikipedia
+5. **DateTime** - Get the current date and time
+6. **Knowledge Base Search (RAG)** - Search through your uploaded documents to answer questions based on your custom knowledge base
 
-6. Open your browser and navigate to:
-   ```
-   http://localhost:3000
-   ```
+### Using RAG in Conversations
 
-## Using the Platform
+When you upload documents to Pinecone, the agent can use this information to answer questions. To use RAG in a conversation:
 
-### Creating a Workflow
+1. Upload your documents using the `upload_to_pinecone.py` script
+2. Enable the RAG tool in the Flow Editor
+3. Ask questions related to the content of your uploaded documents
+4. The agent will automatically detect when to use RAG and retrieve relevant information from your knowledge base
 
-1. Click on "New Workflow" in the dashboard
-2. Give your workflow a name and description
-3. Use the visual editor to build your workflow:
-   - Drag nodes from the sidebar onto the canvas
-   - Connect nodes by dragging from one node's output to another node's input
-   - Configure each node by clicking on it and adjusting its settings
-
-### Testing Your Agent
-
-1. After creating a workflow, click the "Test Agent" button in the header
-2. A chat interface will appear where you can interact with your agent
-3. Type messages to see how your agent responds based on the workflow you've created
-4. The agent will process your message through the workflow nodes and return a response
-
-### Deploying to Slack
-
-1. Click on "Deploy to Slack" in the workflow editor
-2. Authorize the application in your Slack workspace
-3. Select the channels where you want the agent to be active
-4. Click "Deploy" to make your agent live in Slack
-
-## Development
-
-### Adding New Node Types
-
-1. Define the node type in `frontend/src/components/workflow/nodeTypes.js`
-2. Create a component for the node in `frontend/src/components/workflow/nodes/`
-3. Add the node's execution logic in the backend's workflow engine
-
-### Extending Tool Connectors
-
-1. Add the tool definition in the frontend
-2. Implement the tool's backend logic in `backend/app/services/tools/`
-3. Register the tool in the workflow engine
+The agent uses semantic search to find the most relevant passages in your documents and provides answers based on this information, citing the source when possible.
 
 ## Troubleshooting
 
 ### Common Issues
 
-- **Backend Connection Error**: Ensure the backend server is running and the frontend `.env` file has the correct API URL
-- **Database Errors**: Try re-initializing the database with `python init_db.py`
-- **OpenAI API Errors**: Verify your API key is correct in the backend `.env` file
-- **Node Execution Errors**: Check the backend logs for details on execution failures
+1. **Slack connection issues**:
+   - Verify that your Slack tokens are correct
+   - Ensure the app is installed to your workspace
+   - Check that all required scopes are enabled
 
+2. **Google Calendar authentication errors**:
+   - Delete `token.json` and re-authenticate
+   - Verify that the Google Calendar API is enabled
+   - Check that your OAuth credentials are correct
+
+3. **Tool not working**:
+   - Ensure the tool is enabled in the Flow Editor
+   - Check the logs for any error messages
+   - Verify that all required credentials are set up
+
+### Logs
+
+- Application logs are stored in `app.log`
+- Check the logs for detailed error messages and debugging information
