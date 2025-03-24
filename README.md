@@ -35,7 +35,7 @@ This application provides a Slack bot with Google Calendar integration, allowing
 
 2. Install Python dependencies:
    ```bash
-   pip install -r app/requirements.txt
+   pip install -r requirements.txt
    ```
 
 3. Install Flow Editor dependencies:
