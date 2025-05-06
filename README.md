@@ -1,5 +1,5 @@
 # No Code Slack Agent Builder
-<img src="/demo/demo.gif?raw=true" width="400px">
+<img src="/demo/demo.gif?raw=true" width="700px">
 This application provides a Slack bot with Google Calendar integration, allowing users to schedule meetings and view calendar events directly from Slack. The application consists of a backend Python service and a Flow Editor frontend for configuring the agent.
 
 ## Table of Contents
